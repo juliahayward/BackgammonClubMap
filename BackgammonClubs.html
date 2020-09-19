@@ -1,0 +1,546 @@
+<html>
+<head>
+    <style type="text/css">
+        html, body, #map-canvas {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <style>
+  #legend {
+    background: white;
+    padding: 10px;
+  }
+</style>
+    <script type="text/javascript"
+        src="https://maps.googleapis.com/maps/api/js?key=REDACTED">
+    </script>
+    <script>
+        var map;
+
+        function initialize() {
+            var myLatlng = new google.maps.LatLng(54.4, -4.4);
+            var mapOptions = {
+                zoom: 6,
+                center: myLatlng
+            };
+
+            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+            map.controls[google.maps.ControlPosition.RIGHT_TOP].push(document.getElementById('legend'));
+
+            var styles = [
+                {
+                    name: 'UK backgammon clubs', colour: 'red' 
+                },
+                {
+                    name: 'Non-UK backgammon clubs', colour: 'green'
+                },
+                {
+                    name: 'Forming clubs', colour: 'yellow'
+                },
+                {
+                    name: 'General games nights<br/>(coming soon)', colour: 'purple'
+                }
+            ];
+
+            var clubsArray = [
+                {
+                    name: 'Backgammon London', when: 'Second Monday of the month', lat: 51.5403933, long: -0.1561877, orgs: 'Andrew Selby',
+                    where: 'The Princess of Wales, 22 Chalcot Road, Camden Town, NW1 8LL',
+                    details: '<a href="www.backgammonlondon.co.uk">See website</a>'
+                },
+                {
+                    name: 'BucksGammon', when: 'Fourth Wednesday of the month', lat: 51.7041607, long: -0.6125731, orgs: 'Richard Biddle',
+                    where: 'The Drawingroom, Francis Yard, Chesham, HP5 1DG',
+                    details: '<a href="http://bucksgammon.webs.com">See website</a>',
+					logo: './Bucksgammon.jpg'
+                },
+                {
+                    name: 'Backgammon in Clapton', when: '3rd Monday of the month; informal chouettes 1st/3rd Wednesdays', lat: 51.5530383, long: -0.0599803, orgs: 'Simon Morecroft',
+                    where: 'The Star By Hackney Downs, 35 Queensdown Road, London E5 8JQ',
+                    details: '<a href="https://www.facebook.com/groups/1432289346989506/?fref=ts">See website</a>'
+                },
+                {
+                    name: 'Backgammon in Ealing', when: 'Thursday evenings', lat: 51.512744, long: -0.3130218, orgs: 'Graham Read and Peter Bennet',
+                    where: 'The Ex-Servicemen’s Club, 3 Craven Road, London W5 2UA',
+                    details: '<a href="http://www.facebook.com/ealingbackgammon">See website</a>'
+                },
+                {
+                    name: 'Fulham Backgammon', when: 'See website', lat: 51.482395, long: -0.2052267, orgs: 'Richard Biddle',
+                    where: 'The Wellington, 56 Haldane Road, Fulham, London SW6 7EU',
+                    details: '<a href="http://londonplayersbackgammonleague.webs.com">See website</a>',
+					logo: './Fulham64kb.jpg'
+                },
+                {
+                    name: 'Backgammon In The Park (Holland Park', when: 'Sunday afternoons', lat: 51.501965, long: -0.2054303, orgs: 'Eric Maillebiau',
+                    where: 'Holland Park Cafe, Ilchester Place, London W8 6LU',
+                    details: '<a href="http://www.bgip.co.uk">See website</a>'
+                },
+                {
+                    name: 'North London Backgammon', when: 'Second Wednesday of the month, 6pm', lat: 51.5906227, long: -0.1551056, orgs: 'Richard Biddle',
+                    where: 'The Clissold Arms, East Finchley N2 9HR',
+                    details: '<a href="http://northlondonbackgammon.webs.com/">See website</a>',
+					logo: './NorthLondon.gif'
+                },
+                {
+                    name: 'South London Backgammon Club', when: 'Thursday evenings', lat: 51.3655275, long: -0.0989928, orgs: 'Alex Polden',
+                    where: 'The Skylark, South Croydon CR0 1DP',
+                    details: '<a href="http://southlondonbackgammon.co.uk/">See website</a>'
+                },
+                {
+                    name: 'South London Backgammon Club', when: 'Sunday evenings', lat: 51.418149, long: -0.0820703, orgs: 'Alex Polden',
+                    where: 'The Postal Order, Crystal Palace SE19 3RW',
+                    details: '<a href="http://southlondonbackgammon.co.uk/">See website</a>'
+                },
+                {
+                    name: 'St Albans Backgammon Club', when: 'Tuesday evenings', lat: 51.7520688, long: -0.3094266, orgs: 'Chris Purchase',
+                    where: 'The Rat’s Castle, St. Albans AL1 4UN',
+                    details: '<a href="http://freewebs.com/stalbansbg">See website</a>'
+                },
+                {
+                    name: 'The Toll Gate Tournament', when: 'Thursday evenings', lat: 51.5898375, long: -0.1060614, orgs: 'Paul Lamford',
+                    where: 'The Toll Gate, London N8 0PS',
+                    details: '<a href="http://www.facebook.com/pages/The-Toll-Gate-Tournament/1473425139549257">See website</a>'
+                },
+                {
+                    name: 'The William Morris, Walthamstow', when: 'Last Monday of the month', lat: 51.5906747, long: -0.0084308, orgs: 'Ossie Lundie-Smith',
+                    where: 'The William Morris, 807-811 Forest Road, Walthamstow E17 4JD',
+                    details: '<a href="http://www.echo17events.co.uk">See website</a>'
+                },
+                // England South East
+                {
+                    name: 'Bognor Backgammon', when: '2nd Thursday of the month', lat: 50.7798957, long: -0.6866599, orgs: 'Peter Christmas',
+                    where: 'The Waverley, Marine Drive West, Bognor PO21 2QA',
+                    details: '<a href="http://www.backgammon-boards.co.uk">See website</a>'
+                },
+                {
+                    name: '8 Cube Brighton Backgammon', when: 'Wednesday evenings', lat: 50.820571, long: -0.1555722, orgs: 'Tim Parfitt',
+                    where: 'Temple Bar, Western Road, Brighton BN1 2PS',
+                    details: '<a href="https://www.facebook.com/groups/1814419825485483/">See website</a>'
+                },
+                {
+                    name: 'Talk of Tea Backgammon', when: 'Thursday evenings', lat: 50.8249868, long: -0.1493773, orgs: 'Tom Roach',
+                    where: 'Talk of Tea, Brighton BN1 3EF',
+                    details: '<a href="http://www.facebook.com/talkofteabackgammon">See website</a>'
+                },
+                {
+                    name: 'Cambridge University Backgammon Society', when: 'Wednesday evenings', lat: 52.2060017, long: 0.1172278, orgs: 'George Tetley',
+                    where: 'Gonville and Caius College bar, Trinity Street, Cambridge',
+                    details: '<a href="mailto:gjt32@cam.ac.uk">By email</a>',
+					icon: './CambUniCrest.png'
+                },
+                {
+                    name: 'East Kent Backgammon Club', when: 'Alternate Thursday evenings', lat: 51.2828843, long: 1.0521275, orgs: 'James Dixey and Bob Bruce',
+                    where: 'The Old Coach Horses, Church Hill, Harbledown, Canterbury, CT2 9AB',
+                    details: '<a href="http://eastkentbackgammonclub.moonfruit.com">See website</a>'
+                },
+				{
+                    name: 'Jittermugs, Faversham', when: 'Monday evenings', lat: 51.3136997, long: 0.8894061, orgs: '',
+                    where: 'Jittermugs, 18A Preston St, Faversham ME13 8NZ',
+                    details: '<a href="https://www.facebook.com/Jittermugs/">See website</a>'
+                },
+                {
+                    name: 'East Malling Backgammon Club', when: '2nd/4th Mondays of the month', lat: 51.2877266, long: 0.4384637, orgs: 'Liz Simpson',
+                    where: 'Institute Hall, Mill Street, East Malling ME19',
+                    details: '<a href="http://eastmallingbackgammon.blogspot.co.uk">See website</a>'
+                },
+                {
+                    name: 'Lowestoft Backgammon Club', when: 'Thursday evenings', lat: 52.4764587, long: 1.7364012, orgs: 'Gary Thompson',
+                    where: 'The Lake Lothing, 25 Rotterdam Road, Lowestoft NR32 2EU',
+                    details: '<a href="https://www.facebook.com/groups/703244026438822/?fref=ts">See website</a>'
+                },
+                {
+                    name: 'Guildford Backgammon', when: 'See clubs page', lat: 51.23467, long: -0.576918, orgs: 'Jerry White',
+                    where: 'The White House, 8 High Street, Guildford GU2 4AJ',
+                    details: ''
+                },
+                {
+                    name: 'Reading Backgammon Club', when: 'Monday evenings', lat: 51.4642232, long: -0.9775051, orgs: 'Paul Hughes',
+                    where: 'The Moderation, Caversham Road, Reading RG1 8BB',
+                    details: ''
+                },
+                {
+                    name: 'Romsey Backgammon', when: 'Alternate Mondays; see <a href="http://www.meetup.com/Romsey-Backgammon/">Meetup</a>', lat: 50.9875842, long: -1.4937672, orgs: 'Rob Daniel',
+                    where: 'Romsey Comrades Club, South Front, Romsey SO51 8GJ',
+                    details: ''
+                },
+                // South West
+                {
+                    name: 'Bristol Backgammon', when: 'Monday and Thursday evenings', lat: 51.4553911, long: -2.5978398, orgs: 'Ian Tarr',
+                    where: 'Bristol County Sports Club, BS1 5AE',
+                    details: '<a href="http://bristol-backgammon.org">See website</a>',
+                    logo: 'https://scontent.xx.fbcdn.net/hphotos-xlf1/v/t1.0-9/12803186_1691558994458969_1846263822996304397_n.png?oh=39b8fff41bdf39aa6b0a9a2af9fabc4d&oe=5752AB14'
+                },
+                {
+                    name: 'Launceston Backgammon Club', when: 'Alternate Tuesdays, 14.30', lat: 50.6360964, long: -4.3630713, orgs: 'Paul Shaw',
+                    where: 'Number 8 Cafe, 8 Westgate Street, Launceston PL15 7AZ',
+                    details: '<a href="http://lansongammon.blogspot.co.uk">See website</a>'
+                },
+                // Midlandswe
+                {
+                    name: 'Birmingham Backgammon Club', when: 'Monday evenings', lat: 52.4468914, long: -1.8829032, orgs: 'Matthew Fisher and Mike Wood',
+                    where: 'Moseley All Services Club, Moseley B13 9EA',
+                    details: '<a href="http://birminghambackgammon.weebly.com">See website</a>'
+                },
+                {
+                    name: 'Chester Backgammon Club', when: 'First Monday of the month', lat: 53.1865274, long: -2.889796, orgs: 'Graham Cornish',
+                    where: 'The Bear and Billet, Chester CH1 1RU',
+                    details: '<a href="http://chesterbackgammon.co.uk/about/">See website</a>'
+                },
+                {
+                    name: 'Coventry Backgammon Club', when: 'Thursday evenings', lat: 52.4051727, long: -1.4771083, orgs: 'Paul Plumptre',
+                    where: 'Coventry + N Warks Sports Club, Binley Road, Coventry CV3 1HB',
+                    details: '<a href="https://tutchingsp.wixsite.com/covbg">See website</a>'
+                },
+                {
+                    name: 'Ribble Valley Backgammon Club', when: '1st/3rd Tuesday of the month', lat: 53.897992, long: -2.385102, orgs: 'Ian Brown',
+                    where: 'West Bradford Village Hall, Clitheroe BB7 4QH',
+                    details: '<a href="mailto:ianbrownmagic@aol.com">Email</a>'
+                },
+                {
+                    name: 'Jackgammon at the Jackaloupe', when: 'See website', lat: 53.438106, long: -2.274065, orgs: 'Irving Czechowicz and Lee Gorton',
+                    where: 'Chorlton, Manchester M21 8AZ',
+                    details: '<a href="http://www.facebook.com/groups/434489419959383/">See website</a>'
+                },
+                {
+                    name: 'Grosvenor Casino, Leeds', when: 'See website', lat: 53.800492, long: -1.552787, orgs: 'Colin Whiers',
+                    where: 'Podium Buildings, Merrion Way, Leeds LS2 8PD',
+                    details: '<a href="mailto:whiersy@btinternet.com">Contact Colin</a>'
+                },
+                {
+                    name: 'The New Lincoln Backgammon Club', when: 'Thursday evenings', lat: 53.2347404, long: -0.5176308, orgs: 'Michael Crane',
+                    where: 'The Hospital Club, Lincoln LN2 5RA',
+                    details: '<a href="http://homepage.ntlworld.com/michael.a.crane/index/">See website</a>'
+                },
+				{
+                    name: 'Loughborough Backgammon Club', when: 'Monday evenings', lat: 52.7723562, long: -1.2062841, orgs: 'Allen Dye',
+                    where: 'The Centro Lounge, 1 Old Hospital Way, Loughborough',
+                    details: '<a href="https://www.facebook.com/LoughboroughBGC/">See website</a>'
+                },
+                {
+                    name: 'Liverpool Backgammon Club', when: '1st-3rd Thursdays of the month', lat: 53.3973374, long: -2.9179655, orgs: 'Simon Jones',
+                    where: 'The Coffee House, 14 Church Road North, Wavertree, Liverpool L15 9EF (1st/3rd), <br/> Leos Casino, 44 Chaloner Street, Liverpool (2nd) ',
+                    details: '<a href="http://liverpoolbackgammon.co.uk">See website</a>',
+					logo: './LiverpoolLogo.png'
+                },
+                {
+                    name: 'Manchester Backgammon Club', when: 'Tuesday evenings and last Saturday of the month', lat: 53.423523, long: -2.18188, orgs: 'Rodney Lighton',
+                    where: 'The Moor Club, Stockport SK4 4PB',
+                    details: '<a href="http://manchesterbridge.org.uk/backg.htm">See website</a>',
+					logo: './misericord.jpg'
+                },
+                {
+                    name: 'North East Backgammon Association', when: 'First Monday of the month', lat: 54.99172, long: -1.6101506, orgs: 'Martin Barkwill',
+                    where: 'Royal British Legion, 3 West Jesmond Avenue, Newcastle NE2 3EX',
+                    details: '<a href="http://www.northeastbackgammon.com">See website</a>',
+                    logo: 'https://scontent.xx.fbcdn.net/hphotos-xpa1/v/t1.0-9/12109146_1688054464745739_5299825923367561020_n.jpg?oh=9a36714b481d7f8ad5e4694d73160d1e&oe=5790E7ED'
+                },
+                {
+                    name: 'Nottingham Backgammon Club', when: 'Monday evenings', lat: 52.971963, long: -1.172509, orgs: 'Keith Gray',
+                    where: 'The Lion, Mosley Street, Nottingham NG7 7FQ',
+                    details: '<a href="http://nottinghambackgammon.org">See website</a>'
+                },
+                {
+                    name: 'Kensal Rise Backgammon', when: 'Thursdays from 8.30pm', lat: 51.535338, long: -0.2287997, orgs: 'Alfie Kirkpatrick',
+                    where: 'The Island, 123 College Road, Kensal Green NW10 5HA',
+                    details: '<a href="http://krbg.uk">See website</a>'
+                },
+                {
+                    name: 'West Yorkshire Backgammon', when: 'See website', lat: 53.8018473, long: -1.738371, orgs: 'Steve Lee',
+                    where: 'Napoleon’s Casino, Bradford BD1 4DR and other venues',
+                    details: '<a href="http://westyorkshirebackgammon.co.uk/index.html">See website</a>'
+                },
+                {
+                    name: 'Worcester Backgammon Club', when: 'Tuesday evenings', lat: 52.1974828, long: -2.2306444, orgs: 'Sean Jones',
+                    where: 'Barbourne Ex-Servicemens Club, The Moors, Worcester WR1 3ED',
+                    details: '<a href="http://www.worcesterbgc.co.uk">See website</a>',
+					logo: './WorcesterBGC.jpg'
+                },
+                {
+                    name: 'Edinburgh Backgammon', when: 'See website', lat: 55.9635889, long: -3.1780532, orgs: 'Gareth Timms',
+                    where: 'Casablanca Cafe, Edinburgh EH6 8SE',
+                    details: '<a href="http://www.meetup.com/Edinburgh-Backgammon">See website</a>'
+                },
+                {
+                    name: 'Dublin South Backgammon Club', when: 'See website', lat: 53.286069, long: -6.118519, orgs: 'Dama Cunningham',
+                    where: 'Fitzgeralds Pub, Sandycove, Dublin',
+                    details: '<a href="http://www.irishbackgammon.com/category/club-events">See website</a>',
+                    colour: 'green'
+                },
+                {
+                    name: 'Clonakilty Backgammon Club', when: 'Wednesday evenings', lat: 51.6219277, long: -8.889136, orgs: 'Philip Newton (Philafel)',
+                    where: 'Casey’s Bar, Clonakilty',
+                    details: '<a href="http://www.clonakiltybackgammon.com/">See website</a>',
+                    colour: 'green'
+                },
+                {
+                    name: 'Backgammon Galway', when: 'Tuesday evenings', lat: 53.2888211, long: -8.9382559, orgs: 'Joe McGinley',
+                    where: 'MacDonagh’s <i>The Thatch</i> pub, Oranmore',
+                    details: '<a href="http://www.backgammongalway.wix.com/backgammon-galway/">See website</a>',
+                    colour: 'green'
+                },
+                {
+                    name: 'Wicklow Backgammon Club', when: 'See website', lat: 53.0113392, long: -6.1107257, orgs: 'Paul Davitt',
+                    where: 'The Chester Beatty Inn, Ashford, Co. Wicklow',
+                    details: '<a href="http://wicklowbackgammonclub.webs.com/">See website</a>',
+                    colour: 'green'
+                },
+                {
+                    name: 'Cedar Manor, Windermere', when: 'Last Thursday of the month', lat: 54.3814314, long: -2.9136314, orgs: 'Jonathan Kaye',
+                    where: 'Cedar Manor Hotel, Ambleside, Windermere, LA23 1AX', 
+                    details: '<a href="http://www.cedarmanor.co.uk/contact">See website</a>'
+                },
+                {
+                    name: 'Rose and Crown Games Night', when: '2nd/4th Tuesdays of the month', lat: 50.9133894, long: -2.5033867, orgs: '',
+                    where: 'Rose and Crown, A352, Longburton, Dorset DT9 5PD',
+                    details: '<a href="http://www.roseandcrownlongburton.com/#!about1/clj9">See website</a>',
+                    colour: 'purple'
+                },
+                {
+                    name: 'CityGammon', when: 'Tuesdays from 6pm', lat: 51.5124809, long: -0.0775284, orgs: '',
+                    where: 'The Three Lords, 27 Minories, London EC3N 1DE',
+                    details: '<a href="https://sites.google.com/view/citygammon/home">See website</a>',
+                    logo: 'https://scontent-lhr3-1.xx.fbcdn.net/hprofile-xlt1/v/t1.0-1/c27.0.160.160/p160x160/12741916_1075694805785716_3378981143981755880_n.jpg?oh=ee06ff918d3a00aad53379d11dbab03d&oe=574FC888'
+                },
+                {
+                    name: 'Portsmouth Backgammon Club', when: 'weekly, contact for details', lat: 50.7870962, long: -1.0828763, orgs: 'Stewart Pearce',
+                    where: 'Cafe Aurora, 40 Albert Road, Southsea PO5 2SJ',
+                    details: '<a href="mailto:stewartpearce@gmail.com">Contact the club</a>'
+                },
+				{
+                    name: 'Birmingham Estia Backgammon Club', when: 'Mondays, Wednesdays from 7.30pm', lat: 52.5141543, long: -1.8670269, orgs: 'Antonio Papadopoulos',
+                    where: 'Magnet Centre, Park Approach, Birmingham, B23 7SJ',
+                    details: '<a href="mailto:spar.burntwood@btinternet.com">Contact the club</a>'
+                },
+				{
+                    name: 'Sheffield Backgammon Club', when: 'Tuesdays from 7.30pm', lat: 53.3472473, long: -1.52465, orgs: 'Steve White',
+                    where: 'The Toby Carvery, 345 Eccleshall Road South, Sheffield S11 9PW',
+                    details: '<a href="mailto:stevewhiteis@hotmail.co.uk">Contact the club</a>'
+                },
+				{
+                    name: 'Cherwell Boat House', when: 'Annual tournament in November', lat: 51.769642, long: -1.2537696, orgs: '',
+                    where: 'The Cherwell Boat House, Bardwell Rd, Oxford OX2 6ST',
+                    details: '<a href="http://www.cherwellboathouse.co.uk/">Contact the venue</a>',
+					colour: 'purple'
+                },
+				{
+                    name: 'Wanstead Backgammon Society', when: '3rd Monday of the month', lat: 51.5826534, long: 0.0255767, orgs: '',
+                    where: 'The Duke, 79 Nightingale Lane, Wanstead E11 2EY',
+                    details: '<a href="http://wansteadium.com/event/wanstead-backgammon-society/">More details</a>'
+                },
+				{
+                    name: 'Bath Backgammon Club', when: '1st Thursday of the month', lat: 51.3829099, long: -2.3648273, 
+					orgs: '<a href="mailto:mailto:mrsrebeccalipkin@gmail.com">Rebecca Lipkin</a> (please email to confirm space is available)',
+                    where: 'Barton Street Wine Bar, 28 Barton Street, Bath BA1 1HH',
+                    details: '<a href="https://www.facebook.com/events/381335248910897/">More details</a>'
+                },
+				{
+                    name: 'Sapphire Backgammon, London', when: 'Alternate Sundays from 3pm', lat: 51.524205, long: -0.1303473, 
+					orgs: 'Christopher Sattaur',
+                    where: 'The Woolf & Whistle Pub, The Tavistock Hotel, 48-55 Tavistock Square, London WC1H 9EU',
+                    details: '<a href="https://www.meetup.com/Sapphire-Backgammon-In-London/">More details</a>'
+                },
+				{
+                    name: 'Backgammon in Aberdeen', when: '3rd Sunday, 2pm-6pm', lat: 57.1456304, long: -2.0998764, 
+					orgs: 'Brenda Rafferty',
+                    where: 'Carmelite Hotel, Stirling Street, Aberdeen AB11 6JU',
+                    details: ''
+                },
+				{
+                    name: 'Newbury Backgammon Club', when: 'Wednesday evenings', lat: 51.400085, long: -1.3255175, 
+					orgs: 'Oli Crooks-Smith',
+                    where: 'The Catherine Wheel, 35 Cheap Street, Newbury RG14 5DB',
+                    details: '<a href="https://www.facebook.com/NewburyBackgammon/">More details</a>'
+                },
+				{
+                    name: 'Belfast Backgammon Club', when: 'Mondays from 7pm', lat: 54.5994923, long: -5.8761594,
+                    where: 'Stokers Halt, 199 Upper Newtonards Road, Belfast BT4 3JB',
+                    details: '<a href="https://www.belfastbg.com">More details</a>'
+                },
+				{
+                    name: 'Glasgow Backgammon', when: 'Mondays from 7pm', lat: 55.8576464, long: -4.2584237,
+					orgs: 'Ian McFarlane',
+                    where: 'The Crystal Palace, 36 Jamaica Street, G1 4QD',
+                    details: ''
+                },
+				{
+                    name: 'Cambridgeshire Backgammon Meetup', when: 'Thursday evenings', lat: 52.2279852, long: 0.1434216, orgs: 'Peter Booth',
+                    where: 'The Golden Hind, 355 Milton Road, Cambridge CB4 1SP',
+                    details: '<a href="https://www.meetup.com/Cambridgeshire-Backgammon-Meetup/">See Meetup</a>',
+					logo: './cambsflag.png'
+                },
+				{
+                    name: 'Cambridgeshire Backgammon Meetup', when: 'Thursday evenings', lat: 52.3017237, long: -0.0066679, orgs: 'Peter Booth',
+                    where: 'The White Horse, 1 Market St, Swavesey, Cambs CB24 4QG',
+                    details: '<a href="https://www.meetup.com/Cambridgeshire-Backgammon-Meetup/">See Meetup</a>',
+					logo: './cambsflag.png'
+                },
+				{
+                    name: 'Cambridgeshire Backgammon Meetup', when: 'Monday evenings', lat: 52.2433994, long: 0.4014838, orgs: 'Peter Booth',
+                    where: 'The White Hart, 134 High Street, Newmarket CB8 8JP',
+                    details: '<a href="https://www.meetup.com/Cambridgeshire-Backgammon-Meetup/">See Meetup</a>',
+					logo: './cambsflag.png'
+                },
+								{
+                    name: 'Cambridgeshire Backgammon Meetup', when: 'Monday evenings, monthly', lat: 52.2146724, long: -0.2859531, orgs: 'Julia Hayward',
+                    where: 'The Rivermill, School Lane, Eaton Socon PE19 8',
+                    details: '<a href="https://www.meetup.com/Cambridgeshire-Backgammon-Meetup/">See Meetup</a>',
+					logo: './cambsflag.png'
+                },
+				{
+                    name: 'ThameGammon', when: '2nd Thursday of the month, from 6pm', lat: 51.7650513, long: -0.9747488, orgs: 'Cheryl Robinson',
+                    where: '“Jack and Alice Loves Thame”, 14-15 Buttermarket, Thame OX9 3EP',
+                    details: '<a href="https://www.facebook.com/groups/ThameGammon/">See Facebook</a>'
+                },
+				{
+                    name: 'Amersham Backgammon', when: '4th Wednesday of the month, from 6pm', lat: 51.6765537, long: -0.6095907, orgs: 'Lawrence May',
+                    where: 'Metro Lounge, 63-65 Hill Avenue, Amersham HP6 5BX',
+                    details: '<a href="https://www.facebook.com/groups/AmershamBackgammon/">See Facebook</a>'
+                },
+				{
+                    name: 'Bone Club @ FLOK', when: '3rd Sunday of the month, 4-7pm', lat: 53.4827538, long: -2.235923, orgs: 'Guy Haslam',
+                    where: 'FLOK, 5 Stevenson Square, Manchester M1 1DN',
+                    details: '<a href="https://www.boneclub.co.uk/">See website</a>',
+					logo: './Boneclub.png'
+                },
+				{
+                    name: 'Tamar Valley Backgammon Bash', when: 'Alternate Tuesdays', lat: 50.5030069, long: -4.2740891, orgs: 'John Muttitt',
+                    where: 'The Tamar Inn, The Quay, Calstock, Cornwall PL18 9QA',
+                    details: '<a href="https://www.facebook.com/events/2530795073811644/">See Facebook</a>'
+                },
+				{
+                    name: 'Twickenham Backgammon', when: 'Wednesdays from 7pm', lat: 51.4287129, long: -0.3541836, orgs: 'Ken Gibson',
+                    where: 'The Brouge, 241 Hampton Road, Twickenham TW2 5NJ',
+                    details: '<a href="mailto:k_gibson@blueyonder.co.uk">Email for more info</a>'
+                },
+				{
+                    name: 'St Annes Backgammon Club', when: 'Mondays from 8pm', lat: 53.7593848, long: -3.0435013, orgs: 'Ian Squire',
+                    where: 'St Annes Tennis and Squash Club, Avondale Road, St Annes FY8 2QJ',
+                    details: '<a href="mailto:iandavidsquire@gmail.com">Email for more details</a>'
+                },
+				{
+                    name: 'The Queen\'s Head, Earsham', when: '1st and 3rd Tuesday evenings of the month', lat: 52.4506402, long: 1.4115134, orgs: 'Sandy Gilchrist',
+                    where: 'The Queen\'s Head, Station Road, Earsham, Bungay, Norfolk NR35 2TS',
+                    details: '<a href="mailto:sandygilchrist@gmail.com">Email for more info</a>'
+                },
+				{
+                    name: 'North Norfolk Backgammon Circle', when: '1st Sunday of the month, 9.45 - 12.45', lat: 52.9012981, long: 1.21797, 
+					orgs: 'Gerry Enslin, John Ingamells',
+                    where: 'Gresham Villahe Hall, Gresham, Norwich NR11 8RT',
+                    details: '<a href="mailto:j.m.ingamells@gmail.com">Email for more details</a>'
+                },
+				{
+                    name: 'Oxfordshire Backgammon', when: '3rd Wednesday of the month, 7pm', lat: 51.7258545, long: -1.5487361, 
+					orgs: 'Ian Hayes',
+                    where: 'The Horse Shoe, Bridge St, Bampton OX18 2HA',
+                    details: '<a href="mailto:ian.hayes@essays-in-software.com">Email for more details</a>'
+                },
+				{
+                    name: 'Leicester Backgammon Club', when: 'See Facebook', lat: 52.6304723, long: -1.1384733, 
+					orgs: 'Tom Ovenall',
+                    where: 'The Bowling Green, 44 Oxford Road, Leicester LE1 5XW',
+                    details: '<a href="https://www.facebook.com/groups/124497564861942">See Facebook</a>'
+                },
+				{
+                    name: 'Hanwell Backgammon For Fun', when: '2nd/4th Wednesdays', lat: 51.5067285, long: -0.3298301, 
+					orgs: 'Valerie Hayes, Valerie Smith',
+                    where: 'The Grosvenor, 127 Oaklands Road, Hanwell W7 2DT',
+                    details: '<a href="https://www.facebook.com/Backgammon-4-Fun-267102570817745/">See Facebook</a>'
+                },
+				{
+                    name: 'Backgammon at Bridlington', when: 'Mondays from 7pm', lat: 54.0868474, long: -0.2308845, 
+					orgs: 'Roger Porter',
+                    where: 'Bridlington Sports & Community Club, Moorfield Road, Bridlington YO16 4LE',
+                    details: '<a href="mailto:roger@ukbgf.com">Email for info</a>'
+                },
+				{
+                    name: 'Backgammon in Stockton', when: '2nd/4th Thursdays from 7pm', lat: 54.573193, long: -1.3531054, 
+					orgs: 'Judith Hindmarsh',
+                    where: 'Fairfield Sports and Social Club, Elm Tree Avenue, Stockton TS19 0UA',
+                    details: '<a href="mailto:judith.hindmarsh@hotmail.com">Email for info</a>'
+                },
+				{
+                    name: 'Ulverston Backgammon Club', when: '1st/3rd Mondays', lat: 54.1949231, long: -3.0925997, 
+					orgs: 'Paul Galley',
+                    where: 'The Stan Laurel Inn, The Ellers, Ulverston LA12 0AB',
+                    details: ''
+                },
+				{
+                    name: 'Saltburn Backgammon Club', when: '1st Thursday', lat: 54.583107, long: -0.9736844, 
+					orgs: '<a href="mailto:lynmcf@gmail.com">Lynne McFarlane</a>',
+                    where: 'Saltburn Conservative Club, 1 Balmoral Terrace, Saltburn TS12 1AS',
+                    details: '<a href="https://www.facebook.com/groups/2356672301012406/">See Facebook</a>'
+                },
+				{
+                    name: 'Harrogate Backgammon Club', when: 'Monday evenings, 7-10pm', lat: 53.9917701, long: -1.540109, 
+					orgs: '<a href="mailto:whiersy@btinternet.com">Colin Whiers</a>',
+                    where: 'Everyman Cinema, Westgate House, Station Parade, Harrogate HG1 1HQ',
+                    details: '<a href="https://backgammonharrogate.co.uk">See website</a>'
+                },
+				{
+                    name: 'Fermanagh Backgammon Club', when: '1st Monday of the month', lat: 54.3469545, long: -7.6431532, 
+					orgs: 'Danny Gallagher +353 862 679085',
+                    where: 'Blakes of the Hollow, 6 Church Street, Enniskillen BT74 7EJ',
+                    details: '<a href="https://blakesofthehollow.com">See website</a>'
+                },
+            ];
+
+            clubsArray.forEach(addClubToMap);
+            styles.forEach(addStyleToMap);
+        }
+
+        function addStyleToMap(style) {
+            var legend = document.getElementById('legend');
+            var name = style.name;
+            var colour = style.colour;
+            var div = document.createElement('div');
+            div.innerHTML = '<img src="http://maps.google.com/mapfiles/ms/icons/' + colour + '-dot.png"> ' + name;
+            legend.appendChild(div);
+        }
+
+        function addClubToMap(club) {
+            var contentString = '<div id="content">' +
+              ((club.logo != null) ? '<div style="height: 200px; float: left;"><img src="' + club.logo + '" width=120 style="margin: 10px;"></div>' : '') +
+              '<div id="siteNotice">' +
+              '</div>' +
+              '<h2 id="firstHeading" class="firstHeading">' + club.name + '</h2>' +
+              '<div id="bodyContent">' +
+              '<p><b>When:</b> ' + club.when + '</p>' +
+              '<p><b>Where:</b> ' + club.where + '</p>' +
+              '<p><b>Organiser:</b> ' + club.orgs + '</p>' +
+              '<p><b>Details:</b> ' + club.details + '</p>' +
+              '</div>' +
+              '</div>';
+
+            var infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+
+            // also blue- green- yellow- purple-
+            var colour = 'red';
+            if (club.colour != null) colour = club.colour;
+
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(club.lat, club.long),
+                map: map,
+                title: club.name,
+                icon: 'http://maps.google.com/mapfiles/ms/icons/' + colour + '-dot.png' 
+            });
+
+            google.maps.event.addListener(marker, 'click', function () {
+                infowindow.open(map, marker);
+            });
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+</head>
+<body>
+    <div id="map-canvas"></div>
+    <div id="legend">
+        Legend
+    </div>
+</body>
+</html>
